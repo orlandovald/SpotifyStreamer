@@ -1,9 +1,11 @@
-package com.ovlstuff.android.spotifystreamer;
+package com.ovlstuff.android.spotifystreamer.activity;
 
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+
+import com.ovlstuff.android.spotifystreamer.R;
 
 
 public class SearchActivity extends ActionBarActivity {
