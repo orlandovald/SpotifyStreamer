@@ -17,12 +17,14 @@ public class SpotifyWrapperUtil {
 
         int imageCount = images.size();
 
+        Log.v(LOG_TAG, "Trying to find suitable image: maxHeight[" + maxHeight + "] maxWidth[" + maxWidth + "]");
+
         if(imageCount > 0) {
             for(int i = 0; i < imageCount; i++) {
                 Image img = images.get(i);
                 Log.v(LOG_TAG, "Height: " + img.height + " Width: "
                         + img.width + " url: " + img.url);
-                if((img.width >= maxWidth || img.height >= maxHeight)
+                if((img.width >= maxWidth && img.height >= maxHeight)
                     || i == (imageCount - 1)) {
                     return img.url;
                 }

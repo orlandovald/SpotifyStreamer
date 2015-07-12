@@ -8,9 +8,18 @@ import android.os.Parcelable;
  */
 public class SearchResult implements Parcelable{
 
+    private String sourceId;
     private String label;
     private String subLabel;
     private String thumbnailUrl;
+
+    public String getSourceId() {
+        return sourceId;
+    }
+
+    public void setSourceId(String sourceId) {
+        this.sourceId = sourceId;
+    }
 
     public String getLabel() {
         return label;
@@ -48,9 +57,10 @@ public class SearchResult implements Parcelable{
 
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("Label=").append(getLabel())
-                .append("Sub-label=").append(getSubLabel())
+        StringBuilder sb = new StringBuilder()
+                .append("Id: ").append(getSourceId())
+                .append(", Label=").append(getLabel())
+                .append(", Sub-label=").append(getSubLabel())
                 .append(", thumbnailUrl=").append(getThumbnailUrl());
         return sb.toString();
     }

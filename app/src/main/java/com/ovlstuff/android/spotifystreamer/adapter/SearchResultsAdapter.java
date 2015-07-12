@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.ovlstuff.android.spotifystreamer.R;
 import com.ovlstuff.android.spotifystreamer.vo.SearchResult;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -28,24 +29,43 @@ public class SearchResultsAdapter extends ArrayAdapter<SearchResult> {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
-        SearchResult result = getItem(position);
+        ViewHolder holder = null;
 
+        SearchResult result = getItem(position);
         Log.v(LOG_TAG, "Item: " + result.toString());
 
         if(convertView == null) {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.search_artist_list_item, parent, false);
+            holder = new ViewHolder();
+            holder.label = (TextView) convertView.findViewById(R.id.search_result_label);
+            holder.subLabel = (TextView) convertView.findViewById(R.id.search_result_sublabel);
+            holder.thumbnail = (ImageView) convertView.findViewById(R.id.searchResultImg);
+            convertView.setTag(holder);
+        } else {
+            holder = (ViewHolder) convertView.getTag();
         }
 
-        ImageView thumbnail = (ImageView) convertView.findViewById(R.id.searchResultImg);
-        thumbnail.setImageResource(R.mipmap.artist_thumbnail);
+        if(result.getThumbnailUrl() != null) {
+            Picasso.with(getContext())
+                    .load(result.getThumbnailUrl())
+                    .placeholder(R.mipmap.artist_thumbnail)
+                    .error(R.mipmap.artist_thumbnail)
+                    .into(holder.thumbnail);
+        }
+        else {
+            holder.thumbnail.setImageResource(R.mipmap.artist_thumbnail);
+        }
 
-        TextView artistName = (TextView) convertView.findViewById(R.id.search_result_label);
-        artistName.setText(result.getLabel());
 
-        // No need for sub-label for search artist
-        TextView subLabel = (TextView) convertView.findViewById(R.id.search_result_sublabel);
-        artistName.setVisibility(View.GONE);
+        holder.label.setText(result.getLabel());
+        holder.subLabel.setVisibility(View.GONE);
 
         return convertView;
+    }
+
+    static class ViewHolder {
+        TextView label;
+        TextView subLabel;
+        ImageView thumbnail;
     }
 }

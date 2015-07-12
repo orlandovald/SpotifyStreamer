@@ -4,14 +4,20 @@ import android.os.AsyncTask;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.ovlstuff.android.spotifystreamer.R;
 import com.ovlstuff.android.spotifystreamer.adapter.SearchResultsAdapter;
 import com.ovlstuff.android.spotifystreamer.util.SpotifyWrapperUtil;
+import com.ovlstuff.android.spotifystreamer.util.Util;
 import com.ovlstuff.android.spotifystreamer.vo.SearchResult;
 
 import java.util.ArrayList;
@@ -35,6 +41,7 @@ public class SearchActivityFragment extends Fragment {
 
     private SearchResultsAdapter mSearchResultsAdapter;
     private List<SearchResult> mSearchResults = new ArrayList<SearchResult>();
+    private ListView list;
 
     public SearchActivityFragment() {
     }
@@ -42,15 +49,40 @@ public class SearchActivityFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        Log.v(LOG_TAG, "Oncreateview");
+
         View rootView = inflater.inflate(R.layout.fragment_search, container, false);
 
         mSearchResultsAdapter = new SearchResultsAdapter(getActivity(), mSearchResults);
 
-        ListView list = (ListView) rootView.findViewById(R.id.searchResultListView);
+        list = (ListView) rootView.findViewById(R.id.searchResultListView);
         list.setAdapter(mSearchResultsAdapter);
 
-        new SearchArtistTask().execute("megadeth");
+        final EditText searchBox = (EditText) rootView.findViewById(R.id.artist_search_box);
+
+        Log.v(LOG_TAG, "About to set listener");
+
+        searchBox.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                boolean handled = false;
+                Log.v(LOG_TAG, "Inside edit action listener with action: " + actionId);
+                if (actionId == EditorInfo.IME_ACTION_SEARCH
+                        || actionId == EditorInfo.IME_ACTION_UNSPECIFIED) {
+                    String searchInput = v.getText().toString();
+                    Log.v(LOG_TAG, "Searching for " + searchInput);
+                    if(searchInput != null && searchInput.length() > 0) {
+                        new SearchArtistTask().execute(v.getText().toString());
+                        list.setSelectionAfterHeaderView();
+                        v.setText("");
+                        Util.hideSfotKeyboard(getActivity(), v);
+                    }
+                    handled = true;
+                }
+                return handled;
+            }
+        });
+
         return rootView;
     }
 
@@ -81,6 +113,7 @@ public class SearchActivityFragment extends Fragment {
                     for (Artist artist : artistsPager.artists.items) {
                         Log.v(LOG_TAG, "Found artist: " + artist.name);
                         SearchResult res = new SearchResult();
+                        res.setSourceId(artist.id);
                         res.setLabel(artist.name);
                         String imgUrl = SpotifyWrapperUtil.getImageUrlForSearchResultList(
                                 artist.images,
@@ -108,8 +141,10 @@ public class SearchActivityFragment extends Fragment {
         @Override
         protected void onPostExecute(List<SearchResult> artists) {
             if(artists != null) {
+                mSearchResultsAdapter.setNotifyOnChange(false);
                 mSearchResults.clear();
                 mSearchResults.addAll(artists);
+                mSearchResultsAdapter.notifyDataSetChanged();
 //                for(SearchResult searchResult : artists) {
 //                    mSearchResults.add(searchResult);
 //                }
