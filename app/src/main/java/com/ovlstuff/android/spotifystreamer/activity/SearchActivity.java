@@ -2,6 +2,7 @@ package com.ovlstuff.android.spotifystreamer.activity;
 
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -10,8 +11,11 @@ import com.ovlstuff.android.spotifystreamer.R;
 
 public class SearchActivity extends ActionBarActivity {
 
+    private String LOG_TAG = SearchActivity.class.getSimpleName();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Log.v(LOG_TAG, "onCreate");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
     }
