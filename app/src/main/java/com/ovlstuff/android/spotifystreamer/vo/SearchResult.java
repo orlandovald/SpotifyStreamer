@@ -4,14 +4,32 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 /**
+ * Represents a search result to be displayed in a list view
  * Created by ovaldez on 7/10/15.
  */
 public class SearchResult implements Parcelable{
 
-    private String sourceId;
-    private String label;
-    private String subLabel;
-    private String thumbnailUrl;
+    private String sourceId; // id returned by source system, i.e. Spotify
+    private String label; // main label to be displayed in the list view
+    private String subLabel; // optional sublabel to be displayed
+    private String thumbnailUrl; // URL of the thumbnail image
+
+    public SearchResult(String sourceId, String label, String thumbnailUrl) {
+        this.sourceId = sourceId;
+        this.label = label;
+        this.thumbnailUrl = thumbnailUrl;
+    }
+
+    /**
+     * Private constructor to create an object from a Parcel
+     * @param in
+     */
+    private SearchResult(Parcel in) {
+        sourceId = in.readString();
+        label = in.readString();
+        subLabel = in.readString();
+        thumbnailUrl = in.readString();
+    }
 
     public String getSourceId() {
         return sourceId;
@@ -51,8 +69,11 @@ public class SearchResult implements Parcelable{
     }
 
     @Override
-    public void writeToParcel(Parcel dest, int flags) {
-
+    public void writeToParcel(Parcel parcel, int flags) {
+        parcel.writeString(sourceId);
+        parcel.writeString(label);
+        parcel.writeString(subLabel);
+        parcel.writeString(thumbnailUrl);
     }
 
     @Override
@@ -64,4 +85,17 @@ public class SearchResult implements Parcelable{
                 .append(", thumbnailUrl=").append(getThumbnailUrl());
         return sb.toString();
     }
+
+    public final Parcelable.Creator<SearchResult> CREATOR = new Parcelable.Creator<SearchResult>() {
+
+        @Override
+        public SearchResult createFromParcel(Parcel source) {
+            return new SearchResult(source);
+        }
+
+        @Override
+        public SearchResult[] newArray(int size) {
+            return new SearchResult[size];
+        }
+    };
 }
