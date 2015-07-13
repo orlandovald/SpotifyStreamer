@@ -87,8 +87,10 @@ public class SearchActivityFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 SearchResult searchResult = mSearchResultsAdapter.getItem(position);
-                Intent topTracksIntent = new Intent(getActivity(), TopTracksActivity.class)
-                        .putExtra(Intent.EXTRA_TEXT, searchResult.getSourceId());
+                Intent topTracksIntent = new Intent(getActivity(), TopTracksActivity.class);
+                topTracksIntent.putExtra(Intent.EXTRA_TEXT, searchResult.getSourceId());
+                topTracksIntent.putExtra(Intent.EXTRA_TITLE, searchResult.getLabel());
+
                 startActivity(topTracksIntent);
             }
         });

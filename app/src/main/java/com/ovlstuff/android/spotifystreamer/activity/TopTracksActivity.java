@@ -1,7 +1,8 @@
 package com.ovlstuff.android.spotifystreamer.activity;
 
-import android.support.v7.app.ActionBarActivity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -15,6 +16,9 @@ public class TopTracksActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_top_tracks);
+        android.support.v7.app.ActionBar actionBar = getSupportActionBar();
+        actionBar.setTitle(R.string.top_ten_activity_title);
+        actionBar.setSubtitle(getIntent().getExtras().getString(Intent.EXTRA_TITLE));
     }
 
 
