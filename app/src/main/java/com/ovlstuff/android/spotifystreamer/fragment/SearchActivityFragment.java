@@ -1,15 +1,14 @@
 package com.ovlstuff.android.spotifystreamer.fragment;
 
 import android.os.AsyncTask;
-import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -28,7 +27,6 @@ import kaaes.spotify.webapi.android.SpotifyError;
 import kaaes.spotify.webapi.android.SpotifyService;
 import kaaes.spotify.webapi.android.models.Artist;
 import kaaes.spotify.webapi.android.models.ArtistsPager;
-import kaaes.spotify.webapi.android.models.Image;
 import retrofit.RetrofitError;
 
 
@@ -38,12 +36,38 @@ import retrofit.RetrofitError;
 public class SearchActivityFragment extends Fragment {
 
     private final String LOG_TAG = SearchActivityFragment.class.getSimpleName();
+    private final static String BUNDLE_SEARCH_RESULTS_KEY = "searchResults";
+    private final static String BUNDLE_SEARCH_BOX_KEY = "searchBox";
 
     private SearchResultsAdapter mSearchResultsAdapter;
-    private List<SearchResult> mSearchResults = new ArrayList<SearchResult>();
-    private ListView list;
+    private ArrayList<SearchResult> mSearchResults = new ArrayList<SearchResult>();
+    private String mSearchBoxText = "";
+    private ListView mResultsList;
+    private TextView mSearchTextView;
 
     public SearchActivityFragment() {
+
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if(savedInstanceState != null) {
+            if(savedInstanceState.containsKey(BUNDLE_SEARCH_RESULTS_KEY)) {
+                mSearchResults = savedInstanceState.getParcelableArrayList(BUNDLE_SEARCH_RESULTS_KEY);
+            }
+
+            if(savedInstanceState.containsKey(BUNDLE_SEARCH_BOX_KEY)) {
+                mSearchBoxText = savedInstanceState.getString(BUNDLE_SEARCH_BOX_KEY);
+            }
+        }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        outState.putParcelableArrayList(BUNDLE_SEARCH_RESULTS_KEY, mSearchResults);
+        outState.putString(BUNDLE_SEARCH_BOX_KEY, mSearchTextView.getText().toString());
+        super.onSaveInstanceState(outState);
     }
 
     @Override
@@ -54,14 +78,15 @@ public class SearchActivityFragment extends Fragment {
 
         mSearchResultsAdapter = new SearchResultsAdapter(getActivity(), mSearchResults);
 
-        list = (ListView) rootView.findViewById(R.id.searchResultListView);
-        list.setAdapter(mSearchResultsAdapter);
+        mResultsList = (ListView) rootView.findViewById(R.id.searchResultListView);
+        mResultsList.setAdapter(mSearchResultsAdapter);
 
-        final EditText searchBox = (EditText) rootView.findViewById(R.id.artist_search_box);
+        mSearchTextView = (EditText) rootView.findViewById(R.id.artist_search_box);
+        mSearchTextView.setText(mSearchBoxText);
 
         Log.v(LOG_TAG, "About to set listener");
 
-        searchBox.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+        mSearchTextView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
 
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
@@ -71,9 +96,9 @@ public class SearchActivityFragment extends Fragment {
                         || actionId == EditorInfo.IME_ACTION_UNSPECIFIED) {
                     String searchInput = v.getText().toString();
                     Log.v(LOG_TAG, "Searching for " + searchInput);
-                    if(searchInput != null && searchInput.length() > 0) {
+                    if (searchInput != null && searchInput.length() > 0) {
                         new SearchArtistTask().execute(v.getText().toString());
-                        list.setSelectionAfterHeaderView();
+                        mResultsList.setSelectionAfterHeaderView();
                         v.setText("");
                         Util.hideSfotKeyboard(getActivity(), v);
                     }
@@ -112,14 +137,15 @@ public class SearchActivityFragment extends Fragment {
 
                     for (Artist artist : artistsPager.artists.items) {
                         Log.v(LOG_TAG, "Found artist: " + artist.name);
-                        SearchResult res = new SearchResult();
-                        res.setSourceId(artist.id);
-                        res.setLabel(artist.name);
                         String imgUrl = SpotifyWrapperUtil.getImageUrlForSearchResultList(
                                 artist.images,
                                 getResources().getDimensionPixelSize(R.dimen.search_result_thumbnail_max_height),
                                 getResources().getDimensionPixelSize(R.dimen.search_result_thumbnail_max_width));
-                        res.setThumbnailUrl(imgUrl);
+                        SearchResult res = new SearchResult(
+                                artist.id,
+                                artist.name,
+                                imgUrl
+                        );
                         results.add(res);
                     }
 
