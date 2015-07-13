@@ -21,9 +21,11 @@ import java.util.List;
 public class SearchResultsAdapter extends ArrayAdapter<SearchResult> {
 
     private static final String LOG_TAG = SearchResultsAdapter.class.getSimpleName();
+    private boolean showSubLabel;
 
-    public SearchResultsAdapter(Activity context, List<SearchResult> searchResults) {
+    public SearchResultsAdapter(Activity context, List<SearchResult> searchResults, boolean showSubLabel) {
         super(context, 0, searchResults);
+        this.showSubLabel = showSubLabel;
     }
 
     @Override
@@ -58,7 +60,11 @@ public class SearchResultsAdapter extends ArrayAdapter<SearchResult> {
 
 
         holder.label.setText(result.getLabel());
-        holder.subLabel.setVisibility(View.GONE);
+        if(showSubLabel) {
+            holder.subLabel.setText(result.getSubLabel());
+        } else {
+            holder.subLabel.setVisibility(View.GONE);
+        }
 
         return convertView;
     }

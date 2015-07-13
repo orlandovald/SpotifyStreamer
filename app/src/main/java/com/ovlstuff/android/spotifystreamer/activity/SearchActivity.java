@@ -1,8 +1,7 @@
 package com.ovlstuff.android.spotifystreamer.activity;
 
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.util.Log;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -15,7 +14,6 @@ public class SearchActivity extends ActionBarActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        Log.v(LOG_TAG, "onCreate");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
     }

@@ -9,6 +9,8 @@ import com.ovlstuff.android.spotifystreamer.R;
 
 public class TopTracksActivity extends ActionBarActivity {
 
+    private String LOG_TAG = TopTracksActivity.class.getSimpleName();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
