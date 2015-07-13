@@ -45,6 +45,16 @@ public class TopTracksActivityFragment extends Fragment {
     }
 
     @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if(savedInstanceState != null
+                && savedInstanceState.containsKey(BUNDLE_TOP_TRACKS_RESULT_KEY)) {
+            mSearchResults = savedInstanceState.getParcelableArrayList(BUNDLE_TOP_TRACKS_RESULT_KEY);
+
+        }
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
@@ -63,11 +73,21 @@ public class TopTracksActivityFragment extends Fragment {
             }
         });
 
-        String sourceId = getActivity().getIntent().getExtras().getString(Intent.EXTRA_TEXT);
 
-        new GetArtistTopTracksTask().execute(sourceId);
+        if(savedInstanceState == null
+                || !savedInstanceState.containsKey(BUNDLE_TOP_TRACKS_RESULT_KEY)) {
+            String sourceId = getActivity().getIntent().getExtras().getString(Intent.EXTRA_TEXT);
+            new GetArtistTopTracksTask().execute(sourceId);
+
+        }
 
         return rootView;
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        outState.putParcelableArrayList(BUNDLE_TOP_TRACKS_RESULT_KEY, mSearchResults);
+        super.onSaveInstanceState(outState);
     }
 
     public class GetArtistTopTracksTask extends AsyncTask<String, Void, List<SearchResult>> {
