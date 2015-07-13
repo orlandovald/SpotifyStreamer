@@ -5,4 +5,5 @@
 
     <string name="search_action_label">Search</string>
     <string name="search_box_hint">Type artist name</string>
+    <string name="title_activity_top_tracks">TopTracksActivity</string>
 </resources>

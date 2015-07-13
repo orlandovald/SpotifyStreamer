@@ -49,11 +49,11 @@ public class SearchResultsAdapter extends ArrayAdapter<SearchResult> {
             Picasso.with(getContext())
                     .load(result.getThumbnailUrl())
                     .placeholder(R.mipmap.artist_thumbnail)
-                    .error(R.mipmap.artist_thumbnail)
+                    .error(R.mipmap.no_image)
                     .into(holder.thumbnail);
         }
         else {
-            holder.thumbnail.setImageResource(R.mipmap.artist_thumbnail);
+            holder.thumbnail.setImageResource(R.mipmap.no_image);
         }
 
 

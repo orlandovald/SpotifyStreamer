@@ -100,7 +100,7 @@ public class SearchActivityFragment extends Fragment {
                         new SearchArtistTask().execute(v.getText().toString());
                         mResultsList.setSelectionAfterHeaderView();
                         v.setText("");
-                        Util.hideSfotKeyboard(getActivity(), v);
+                        Util.hideSoftKeyboard(getActivity(), v);
                     }
                     handled = true;
                 }

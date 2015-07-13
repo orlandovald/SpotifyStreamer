@@ -9,7 +9,7 @@ import android.widget.TextView;
  */
 public class Util {
 
-    public static void hideSfotKeyboard(Activity activity, TextView textView) {
+    public static void hideSoftKeyboard(Activity activity, TextView textView) {
         InputMethodManager imm = (InputMethodManager) activity
                 .getSystemService(textView.getContext().INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(textView.getWindowToken(),
