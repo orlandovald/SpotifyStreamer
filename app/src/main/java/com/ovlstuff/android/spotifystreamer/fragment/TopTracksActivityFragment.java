@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ovlstuff.android.spotifystreamer.R;
@@ -40,6 +41,7 @@ public class TopTracksActivityFragment extends Fragment {
     private SearchResultsAdapter mSearchResultsAdapter;
     private ArrayList<SearchResult> mSearchResults = new ArrayList<SearchResult>();
     private ListView mResultsList;
+    private TextView mResultsMsgView;
 
     public TopTracksActivityFragment() {
     }
@@ -69,16 +71,24 @@ public class TopTracksActivityFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 SearchResult searchResult = mSearchResultsAdapter.getItem(position);
-                Toast.makeText(getActivity(), searchResult.toString(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(),
+                        String.format(getResources().getString(R.string.top_ten_now_playing), searchResult.getLabel()),
+                        Toast.LENGTH_SHORT).show();
             }
         });
 
+        mResultsMsgView = (TextView) rootView.findViewById(R.id.top_tracks_msg);
 
         if(savedInstanceState == null
                 || !savedInstanceState.containsKey(BUNDLE_TOP_TRACKS_RESULT_KEY)) {
             String sourceId = getActivity().getIntent().getExtras().getString(Intent.EXTRA_TEXT);
             new GetArtistTopTracksTask().execute(sourceId);
 
+        }
+
+        if(mSearchResults.size() > 0) {
+            mResultsList.setVisibility(View.VISIBLE);
+            mResultsMsgView.setVisibility(View.GONE);
         }
 
         return rootView;
@@ -143,11 +153,16 @@ public class TopTracksActivityFragment extends Fragment {
 
         @Override
         protected void onPostExecute(List<SearchResult> tracks) {
-            if(tracks != null) {
+            if(tracks != null && tracks.size() > 0) {
+                mResultsMsgView.setVisibility(View.GONE);
                 mSearchResultsAdapter.setNotifyOnChange(false);
                 mSearchResults.clear();
                 mSearchResults.addAll(tracks);
                 mSearchResultsAdapter.notifyDataSetChanged();
+                mResultsList.setVisibility(View.VISIBLE);
+            } else {
+                mResultsMsgView.setText(R.string.top_ten_msg_no_results);
+                mResultsMsgView.setVisibility(View.VISIBLE);
             }
 
         }

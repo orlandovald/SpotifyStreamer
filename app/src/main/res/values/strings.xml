@@ -6,7 +6,13 @@
     <string name="search_action_label">Search</string>
     <string name="search_box_hint">Type artist name</string>
     <string name="title_activity_top_tracks">TopTracksActivity</string>
+
+    <string name="artist_search_msg_search">Enter an artist name and press search</string>
+    <string name="artist_search_msg_no_results">No artists found</string>
     
     <!-- Top Ten Tracks activity -->
     <string name="top_ten_activity_title">Top Ten Tracks</string>
+    <string name="top_ten_msg_getting_tracks">Retrieving artist tracks</string>
+    <string name="top_ten_msg_no_results">No tracks found</string>
+    <string name="top_ten_now_playing">Now playing %1$s! (ok not now but soon)</string>
 </resources>

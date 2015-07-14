@@ -46,7 +46,8 @@ public class SearchActivityFragment extends Fragment {
     private ArrayList<SearchResult> mSearchResults = new ArrayList<SearchResult>();
     private String mSearchBoxText = "";
     private ListView mResultsList;
-    private TextView mSearchTextView;
+    private EditText mSearchTextView;
+    private TextView mSearchMsgView;
 
     public SearchActivityFragment() {
     }
@@ -83,6 +84,7 @@ public class SearchActivityFragment extends Fragment {
         mResultsList = (ListView) rootView.findViewById(R.id.searchResultListView);
         mResultsList.setAdapter(mSearchResultsAdapter);
 
+
         mResultsList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -97,6 +99,14 @@ public class SearchActivityFragment extends Fragment {
 
         mSearchTextView = (EditText) rootView.findViewById(R.id.artist_search_box);
         mSearchTextView.setText(mSearchBoxText);
+
+        mSearchMsgView = (TextView) rootView.findViewById(R.id.artist_search_msg);
+
+        if(mSearchResults.size() > 0) {
+            mResultsList.setVisibility(View.VISIBLE);
+            mSearchMsgView.setVisibility(View.GONE);
+
+        }
 
         Log.v(LOG_TAG, "About to set listener");
 
@@ -180,14 +190,18 @@ public class SearchActivityFragment extends Fragment {
 
         @Override
         protected void onPostExecute(List<SearchResult> artists) {
-            if(artists != null) {
+            if(artists != null && artists.size() > 0) {
                 mSearchResultsAdapter.setNotifyOnChange(false);
                 mSearchResults.clear();
                 mSearchResults.addAll(artists);
                 mSearchResultsAdapter.notifyDataSetChanged();
-//                for(SearchResult searchResult : artists) {
-//                    mSearchResults.add(searchResult);
-//                }
+                mResultsList.setVisibility(View.VISIBLE);
+                mSearchMsgView.setVisibility(View.GONE);
+            } else {
+                mResultsList.setVisibility(View.GONE);
+                mSearchMsgView.setText(R.string.artist_search_msg_no_results);
+                mSearchMsgView.setVisibility(View.VISIBLE);
+                mSearchResults.clear();
             }
         }
     }

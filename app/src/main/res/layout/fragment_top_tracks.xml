@@ -12,5 +12,17 @@
         android:id="@+id/top_tracks_list"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:layout_alignParentBottom="true"
+        android:visibility="gone" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="fill_parent"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="@string/top_ten_msg_getting_tracks"
+        android:id="@+id/top_tracks_msg"
+        android:layout_centerHorizontal="true"
+        android:gravity="center_vertical"
+        android:layout_alignParentBottom="true"/>
 </RelativeLayout>
