@@ -108,18 +108,14 @@ public class SearchActivityFragment extends Fragment {
 
         }
 
-        Log.v(LOG_TAG, "About to set listener");
-
         mSearchTextView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
 
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 boolean handled = false;
-                Log.v(LOG_TAG, "Inside edit action listener with action: " + actionId);
                 if (actionId == EditorInfo.IME_ACTION_SEARCH
                         || actionId == EditorInfo.IME_ACTION_UNSPECIFIED) {
                     String searchInput = v.getText().toString();
-                    Log.v(LOG_TAG, "Searching for " + searchInput);
                     if (searchInput != null && searchInput.length() > 0) {
                         new SearchArtistTask().execute(v.getText().toString());
                         mResultsList.setSelectionAfterHeaderView();
@@ -143,7 +139,7 @@ public class SearchActivityFragment extends Fragment {
         protected List<SearchResult> doInBackground(String... params) {
 
             if(params.length == 0) {
-                Log.v(LOG_TAG, "No parameter received for task");
+                Log.i(LOG_TAG, "No parameter received for task");
                 return null;
             }
 

@@ -23,10 +23,8 @@ public class TopTracksActivity extends ActionBarActivity {
         actionBar.setDisplayHomeAsUpEnabled(true);
     }
 
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_top_tracks, menu);
         return true;
     }
@@ -36,8 +34,6 @@ public class TopTracksActivity extends ActionBarActivity {
         switch(item.getItemId()) {
             case android.R.id.home:
                 finish();
-                return true;
-            case R.id.action_settings:
                 return true;
         }
 

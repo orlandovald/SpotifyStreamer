@@ -1,7 +1,6 @@
 package com.ovlstuff.android.spotifystreamer.adapter;
 
 import android.app.Activity;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,7 +33,6 @@ public class SearchResultsAdapter extends ArrayAdapter<SearchResult> {
         ViewHolder holder = null;
 
         SearchResult result = getItem(position);
-        Log.v(LOG_TAG, "Item: " + result.toString());
 
         if(convertView == null) {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.search_artist_list_item, parent, false);

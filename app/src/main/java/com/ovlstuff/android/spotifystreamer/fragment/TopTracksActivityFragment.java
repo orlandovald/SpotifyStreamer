@@ -108,7 +108,7 @@ public class TopTracksActivityFragment extends Fragment {
         protected List<SearchResult> doInBackground(String... params) {
 
             if(params.length == 0) {
-                Log.v(LOG_TAG, "No parameter received for task");
+                Log.i(LOG_TAG, "No parameter received for task");
                 return null;
             }
 
